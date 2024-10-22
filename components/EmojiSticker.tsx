@@ -50,17 +50,17 @@ export default function EmojiSticker({ imageSize, stickerSource }: Props) {
       height: withSpring(scaleImage.value),
     };
   });
-    return (
-      <GestureDetector gesture={drag}>
-        <Animated.View style={[containerStyle, { top: -350 }]}>
-          <GestureDetector gesture={doubleTap}>
-            <Animated.Image
-              source={stickerSource}
-              resizeMode="contain"
-              style={[imageStyle, { width: imageSize, height: imageSize }]}
-            />
-          </GestureDetector>
-        </Animated.View>
-      </GestureDetector>
-    );
+  return (
+    <GestureDetector gesture={drag}>
+      <Animated.View style={[containerStyle, { top: -350 }]}>
+        <GestureDetector gesture={doubleTap}>
+          <Animated.Image
+            source={stickerSource}
+            resizeMode="contain"
+            style={[imageStyle, { width: imageSize, height: imageSize }]}
+          />
+        </GestureDetector>
+      </Animated.View>
+    </GestureDetector>
+  );
 }

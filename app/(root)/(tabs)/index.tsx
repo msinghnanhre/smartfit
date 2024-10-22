@@ -12,13 +12,16 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as MediaLibrary from "expo-media-library";
 import { captureRef } from "react-native-view-shot";
 import domtoimage from "dom-to-image";
+import { useTheme } from "react-native-paper";
 const PlaceholderImage = require("@/assets/images/background-image.jpg");
 
 export default function Index() {
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const imageRef = useRef<View>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const [selectedImage, setSelectedImage] = useState<undefined | string>(
-    undefined
+    undefined,
   );
 
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
@@ -88,74 +91,77 @@ export default function Index() {
     }
   };
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <View style={styles.imageContainer}>
-        <View ref={imageRef} collapsable={false}>
-          <ImageViewer
-            imgSource={PlaceholderImage}
-            selectedImage={selectedImage}
-          />
-          {pickedEmoji !== undefined ? (
-            <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />
-          ) : null}
-        </View>
-      </View>
-      {showAppOptions ? (
-        <View style={styles.optionsContainer}>
-          <View style={styles.optionsRow}>
-            <IconButton icon="refresh" label="Reset" onPress={onReset} />
-            <CircleButton onPress={onAddSticker} />
-            <IconButton
-              icon="save-alt"
-              label="Save"
-              onPress={onSaveImageAsync}
+    <View>
+      <GestureHandlerRootView style={styles.container}>
+        <View style={styles.imageContainer}>
+          <View ref={imageRef} collapsable={false}>
+            <ImageViewer
+              imgSource={PlaceholderImage}
+              selectedImage={selectedImage}
             />
+            {pickedEmoji !== undefined ? (
+              <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />
+            ) : null}
           </View>
         </View>
-      ) : (
-        <View style={styles.footerContainer}>
-          <Button
-            label="Choose a photo"
-            theme="primary"
-            onPress={pickImageAsync}
-          />
-          <Button
-            label="Use this photo"
-            onPress={() => setShowAppOptions(true)}
-          />
-        </View>
-      )}
-      <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
-        <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose} />
-      </EmojiPicker>
-    </GestureHandlerRootView>
+        {showAppOptions ? (
+          <View style={styles.optionsContainer}>
+            <View style={styles.optionsRow}>
+              <IconButton icon="refresh" label="Reset" onPress={onReset} />
+              <CircleButton onPress={onAddSticker} />
+              <IconButton
+                icon="save-alt"
+                label="Save"
+                onPress={onSaveImageAsync}
+              />
+            </View>
+          </View>
+        ) : (
+          <View style={styles.footerContainer}>
+            <Button
+              label="Choose a photo"
+              theme="primary"
+              onPress={pickImageAsync}
+            />
+            <Button
+              label="Use this photo"
+              onPress={() => setShowAppOptions(true)}
+            />
+          </View>
+        )}
+        <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
+          <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose} />
+        </EmojiPicker>
+      </GestureHandlerRootView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#25292e",
-    alignItems: "center",
-  },
-  imageContainer: {
-    flex: 1,
-  },
-  image: {
-    width: 320,
-    height: 440,
-    borderRadius: 18,
-  },
-  footerContainer: {
-    flex: 1 / 3,
-    alignItems: "center",
-  },
-  optionsContainer: {
-    position: "absolute",
-    bottom: 80,
-  },
-  optionsRow: {
-    alignItems: "center",
-    flexDirection: "row",
-  },
-});
+const createStyles = (theme: any) => {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+      alignItems: "center",
+    },
+    imageContainer: {
+      flex: 1,
+    },
+    image: {
+      width: 320,
+      height: 440,
+      borderRadius: 18,
+    },
+    footerContainer: {
+      flex: 1 / 3,
+      alignItems: "center",
+    },
+    optionsContainer: {
+      position: "absolute",
+      bottom: 80,
+    },
+    optionsRow: {
+      alignItems: "center",
+      flexDirection: "row",
+    },
+  });
+};
